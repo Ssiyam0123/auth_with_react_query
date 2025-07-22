@@ -14,7 +14,7 @@ export default function Navbar() {
         <Link href={"/"}>Home</Link>
         <Link href={"/"}>About</Link>
         <Link href={"/profile"}>profile</Link>
-        <button onClick={() => signOut()}></button>
+        {session && <button onClick={() => signOut({callbackUrl:"/"})}>logout</button>}
         {!session && <Link href={"/register"}>register</Link>}
       </div>
     );

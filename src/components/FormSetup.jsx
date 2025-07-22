@@ -1,21 +1,31 @@
 "use client";
 import { useRegister } from "@/hooks/useRegister";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function FormSetup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
   const path = usePathname();
+  const { status } = useSession();
+  console.log(status);
   console.log(path);
 
+  useEffect(() => {
+    if (status == "authenticated") {
+      router.push("/");
+      toast.success("successfully logged in");
+    }
+  }, [status]);
+
   const handleRegister = async () => {
-    // await signIn("credentials", { email, password });
     const body = {
+      name,
       email,
       password,
     };
@@ -30,17 +40,29 @@ export default function FormSetup() {
     }
   };
 
-  const handleLogin = async () =>{
-    const res = await signIn('credentials', {email, password})
-    console.log(res)
-  }
+  const handleLogin = async () => {
+    const isSignIn = await signIn("credentials", { email, password });
+    console.log(isSignIn);
+  };
 
   return (
     <div className="space-y-3">
+      {path == "/register" && (
+        <div className="flex items-center gap-2">
+          <p>enter your name : </p>
+          <input
+            type="text"
+            required
+            className="border-2 p-2 rounded-2xl"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+      )}
       <div className="flex items-center gap-2">
         <p>enter your email : </p>
         <input
           type="email"
+          required
           className="border-2 p-2 rounded-2xl"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -49,6 +71,7 @@ export default function FormSetup() {
         <p>enter your password : </p>
         <input
           type="password"
+          required
           className="border-2 p-2 rounded-2xl"
           onChange={(e) => setPassword(e.target.value)}
         />
