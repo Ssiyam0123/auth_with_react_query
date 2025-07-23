@@ -1,6 +1,23 @@
+"use client";
+
+import useDeletePost from "@/hooks/useDeletePost";
+import useUsersAllPost from "@/hooks/useUsersAllPost";
+import { useSession } from "next-auth/react";
 import React from "react";
 
-export default function PostCard({ data }) {
+export default function PostCard({ data, refetch }) {
+  const { mutate: deletePost } = useDeletePost();
+
+  const handleDelete =  (id) => {
+    console.log(id);
+    try {
+       deletePost(id);
+    
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="space-y-2">
       {data?.map((c) => (
@@ -8,7 +25,17 @@ export default function PostCard({ data }) {
           <p>{c?.title}</p>
           <p>{c?.description}</p>
           <div className="mb-5 mt-2 border-t-2">
-            <button> Like : {c?.likes}</button>
+            <button className="border-2 p-2 mt-3 cursor-pointer ">
+              {" "}
+              Like : {c?.likes?.count}
+            </button>
+            <button
+              onClick={() => handleDelete(c?._id)}
+              className="border-2 p-2 mt-3 cursor-pointer "
+            >
+              {" "}
+              delete post
+            </button>
           </div>
         </div>
       ))}

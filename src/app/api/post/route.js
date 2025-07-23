@@ -7,15 +7,13 @@ export async function POST(req) {
 
   try {
     await connectDb();
-    console.log("send to db :", {
-      ...postData,
-      likes: 0,
-      comments: [],
-    });
 
     const newPost = await Post.create({
       ...postData,
-      likes: 0,
+      likes: {
+        count: 0,
+        likedBy: [],
+      },
       comments: [],
     });
 

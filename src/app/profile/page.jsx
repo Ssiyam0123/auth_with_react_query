@@ -10,7 +10,7 @@ export default function ProfilePage() {
   const { data } = useSession();
   const email = data?.user?.email;
   const { data: user } = useCurrentUser(email);
-  const { data: userPosts } = useUsersAllPost(email);
+  const { data: userPosts, refetch } = useUsersAllPost(email);
   console.log(userPosts)
 
 
@@ -27,7 +27,7 @@ export default function ProfilePage() {
         <div className="w-[80%] mx-auto">
           <p>total posts : {userPosts?.length}</p>
           <div>
-            <PostCard data={userPosts} />
+            <PostCard data={userPosts} refetch={refetch} />
           </div>
         </div>
       </div>

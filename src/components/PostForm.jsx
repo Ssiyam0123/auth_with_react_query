@@ -6,15 +6,14 @@ import useUsersAllPost from "@/hooks/useUsersAllPost";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-
 export default function PostForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const { data } = useSession();
-  const { mutate: createPost } = useCreatePost();
+  const { mutateAsync: createPost } = useCreatePost();
   const email = data?.user?.email;
   const { data: user } = useCurrentUser(email);
-  const {refetch} = useUsersAllPost(email)
+  const { refetch } = useUsersAllPost(email);
   // console.log(user)
 
   const postData = {
@@ -26,10 +25,13 @@ export default function PostForm() {
     description,
   };
 
-  const handlePost = () => {
+  const handlePost =  () => {
     // console.log(postData)
-    createPost(postData);
-    refetch()
+    try {
+       createPost(postData);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="mt-10 space-y-5">

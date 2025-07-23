@@ -8,7 +8,10 @@ const postSchema = new Schema(
     },
     title: { type: String },
     description: { type: String },
-    likes: { type: Number },
+    likes: {
+      count: { type: Number },
+      likedBy:[ { type: String }],
+    },
     comments: [
       {
         name: { type: String },
