@@ -2,8 +2,9 @@ import { connectDb } from "@/lib/db";
 import Post from "@/models/Post";
 
 export async function POST(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   const { email } = await req.json();
+  console.log(id, email)
 
   try {
     await connectDb();

@@ -29,12 +29,19 @@ export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const email = searchParams.get("email");
+    const type = searchParams.get("type");
 
     await connectDb();
 
-    const posts = await Post.find({ "user.email": email });
+    if (type == "single-user") {
+      const posts = await Post.find({ "user.email": email });
+      return Response.json(posts);
+    } else if (type == "all-user") {
+      const posts = await Post.find();
+      return Response.json(posts);
+    }
 
-    return Response.json(posts);
+    return Response.json({ message: "error while fatching posts" });
   } catch (error) {
     console.log(error);
   }
