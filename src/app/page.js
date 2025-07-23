@@ -10,7 +10,9 @@ export default function Home() {
   console.log(data);
   return (
     <div className="w-[80%] mx-auto mt-10">
-      <PostCard data={data} />{" "}
+      {
+        session? <PostCard data={data} /> : <p className="text-center">please login for see the posts</p>
+      }
     </div>
   );
 }
